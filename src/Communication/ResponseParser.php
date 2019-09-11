@@ -4,8 +4,8 @@ namespace Demo\Communication;
 
 class ResponseParser
 {
-    const ERROR_RESPONSE_STATUS = 'fail';
     const SUCCESS_RESPONSE_STATUS = 'ok';
+    const ERROR_RESPONSE_STATUS = 'fail';
 
     /**
      * Creates a Response object from a json string.
@@ -56,5 +56,36 @@ class ResponseParser
         }
 
         throw new \Exception("Invalid response status: {$responseArray['status']}");
+    }
+
+    /**
+     * @param string $message
+     * @param int $reference
+     *
+     * @return Response
+     */
+    private function buildSuccessResponse($message, $reference)
+    {
+        return Response::success()
+            ->withMessage($message)
+            ->withReference($reference);
+    }
+
+    /**
+     * @param string $jsonResponseId
+     *
+     * @return int
+     */
+    private function computeReference($jsonResponseId)
+    {
+        $id = (int)$jsonResponseId;
+
+        if ($id % 2 === 0) {
+            $reference = $id / 2;
+        } else {
+            $reference = $id;
+        }
+
+        return $reference;
     }
 }
