@@ -4,9 +4,6 @@ namespace Demo\Communication;
 
 class ResponseParser
 {
-    const ERROR_RESPONSE_STATUS = 'fail';
-    const SUCCESS_RESPONSE_STATUS = 'ok';
-
     /**
      * Creates a Response object from a json string.
      *
@@ -36,23 +33,13 @@ class ResponseParser
     {
         $responseArray = json_decode($jsonResponse, true);
 
-        if ($responseArray['status'] === self::SUCCESS_RESPONSE_STATUS) {
-            $id = $responseArray['id'];
-
-            if ($id % 2 === 0) {
-                $reference = $id / 2;
-            } else {
-                $reference = $id;
-            }
-
+        if ($responseArray['status'] === 'ok') {
             return Response::success()
-                ->withMessage($responseArray['reason'])
-                ->withReference($reference);
+                ->withMessage($responseArray['reason']);
 
-        } elseif ($responseArray['status'] === self::ERROR_RESPONSE_STATUS) {
+        } elseif ($responseArray['status'] === 'fail') {
             return Response::error()
-                ->withMessage('ERROR - ' . $responseArray['reason'])
-                ->withReference($responseArray['id']);
+                ->withMessage('ERROR - ' . $responseArray['reason']);
         }
 
         throw new \Exception("Invalid response status: {$responseArray['status']}");

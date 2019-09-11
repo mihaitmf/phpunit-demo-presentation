@@ -4,18 +4,6 @@ namespace Demo\Communication;
 
 class ApiClient
 {
-    /** @var HttpClient */
-    private $httpClient;
-
-    /** @var ResponseParser */
-    private $responseParser;
-
-    public function __construct(HttpClient $httpClient, ResponseParser $responseParser)
-    {
-        $this->httpClient = $httpClient;
-        $this->responseParser = $responseParser;
-    }
-
     /**
      * @param array $requestArray
      *
@@ -24,8 +12,11 @@ class ApiClient
      */
     public function callApi(array $requestArray)
     {
-        $jsonResponse = $this->httpClient->makeHttpRequest($requestArray);
+        $httpClient = new HttpClient();
+        $jsonResponse = $httpClient->makeHttpRequest($requestArray);
 
-        return $this->responseParser->parse($jsonResponse);
+        $responseParser = new ResponseParser();
+
+        return $responseParser->parse($jsonResponse);
     }
 }
