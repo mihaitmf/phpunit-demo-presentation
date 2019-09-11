@@ -10,9 +10,6 @@ class Response
     /** @var string */
     private $message;
 
-    /** @var int */
-    private $reference;
-
     private function __construct()
     {
     }
@@ -62,24 +59,6 @@ class Response
     public function withMessage($message)
     {
         $this->message = $message;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getReference()
-    {
-        return $this->reference;
-    }
-
-    /**
-     * @param int $reference
-     * @return Response
-     */
-    public function withReference($reference)
-    {
-        $this->reference = $reference;
         return $this;
     }
 }
