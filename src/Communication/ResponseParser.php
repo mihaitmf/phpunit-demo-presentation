@@ -22,6 +22,11 @@ class ResponseParser
      * An "error" Response object is returned when the json contains "status" = "fail".
      * The Response "message" is the json field "reason" prefixed with "ERROR - ".
      *
+     * ADDITIONAL REQUIREMENT
+     * Populate the Response object "reference" property with the value from the json "id" field following the rule:
+     *      - for even "id" values, set the value divided by 2; ex: id = 100  ->  reference = 50.
+     *      - for odd "id" values, set the same value; ex: id = 100  ->  reference = 100.
+     *
      * @param string $jsonResponse
      *
      * @return Response
