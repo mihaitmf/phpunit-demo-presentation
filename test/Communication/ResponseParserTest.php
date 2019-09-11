@@ -28,7 +28,7 @@ class ResponseParserTest extends TestCase
     public function testParseSuccessResponse($jsonReference, $expectedReference)
     {
         $expectedIsSuccessful = true;
-        $expectedMessage = "Success message";
+        $expectedMessage = 'Success message';
 
         $jsonResponse = sprintf(
             '{"status":"ok","reason":"Success message","id":%d,"extra":"some details"}',
@@ -45,7 +45,7 @@ class ResponseParserTest extends TestCase
     public function testParseErrorResponse()
     {
         $expectedIsSuccessful = false;
-        $expectedMessage = "ERROR - Invalid response";
+        $expectedMessage = 'ERROR - Invalid response';
         $expectedReference = 1234;
 
         $jsonResponse = '{"status":"fail","reason":"Invalid response","id":1234,"extra":"some details"}';
@@ -60,7 +60,7 @@ class ResponseParserTest extends TestCase
     public function testParseExceptionForInvalidResponseStatus()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Invalid response status: something");
+        $this->expectExceptionMessage('Invalid response status: something');
 
         $jsonResponse = '{"status":"something","reason":"Success message","id":1234,"extra":"some details"}';
 
