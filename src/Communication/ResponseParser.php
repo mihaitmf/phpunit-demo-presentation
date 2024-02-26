@@ -26,7 +26,7 @@ class ResponseParser
      * Only for the success case, populate the Response object "reference" property with the value from
      * the json "id" field following the rule:
      *      - for even "id" values, set the value divided by 2; ex: id = 100  ->  reference = 50.
-     *      - for odd "id" values, set the same value; ex: id = 100  ->  reference = 100.
+     *      - for odd "id" values, set the same value; ex: id = 101  ->  reference = 101.
      *
      * @param string $jsonResponse
      *
@@ -38,55 +38,31 @@ class ResponseParser
         $responseArray = json_decode($jsonResponse, true);
 
         if ($responseArray['status'] === self::SUCCESS_RESPONSE_STATUS) {
-            $id = $responseArray['id'];
-
-            if ($id % 2 === 0) {
-                $reference = $id / 2;
-            } else {
-                $reference = $id;
-            }
-
-            return Response::success()
-                ->withMessage($responseArray['reason'])
-                ->withReference($reference);
+            return $this->buildSuccessResponse($responseArray);
 
         } elseif ($responseArray['status'] === self::ERROR_RESPONSE_STATUS) {
             return Response::error()
-                ->withMessage('ERROR - ' . $responseArray['reason'])
-                ->withReference($responseArray['id']);
+                ->withMessage('ERROR - ' . $responseArray['reason']);
         }
 
         throw new \Exception("Invalid response status: {$responseArray['status']}");
     }
 
     /**
-     * @param string $message
-     * @param int $reference
+     * @param $responseArray
      *
      * @return Response
      */
-    private function buildSuccessResponse($message, $reference)
+    private function buildSuccessResponse($responseArray): Response
     {
-        return Response::success()
-            ->withMessage($message)
-            ->withReference($reference);
-    }
+        $ref = (int)$responseArray['id'];
 
-    /**
-     * @param string $jsonResponseId
-     *
-     * @return int
-     */
-    private function computeReference($jsonResponseId)
-    {
-        $id = (int)$jsonResponseId;
-
-        if ($id % 2 === 0) {
-            $reference = $id / 2;
-        } else {
-            $reference = $id;
+        if ($ref % 2 === 0) {
+            $ref /= 2;
         }
 
-        return $reference;
+        return Response::success()
+            ->withMessage($responseArray['reason'])
+            ->withReference($ref);
     }
 }

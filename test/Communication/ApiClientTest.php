@@ -23,7 +23,7 @@ class ApiClientTest extends TestCase
         $this->sut = new ApiClient($this->httpClientStub, $this->responseParserMock);
     }
 
-    public function testCallApiSuccess()
+    public function testCallApiSuccessResponse()
     {
         $requestArray = [];
         $dummyJsonResponse = 'sample response';
